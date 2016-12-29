@@ -12,11 +12,11 @@ import {
     Switch,
     Platform,
 } from 'react-native';
-let CANCLE_LOGIIN="0X00";
-let CANCLE_DIOLOG="0X11"
 export default class Dialog extends Component {
     constructor(props){
         super(props);
+        this.CANCLE_LOGIIN="0X00",
+        this.CANCLE_DIOLOG="0X11",
         this.state={
             animationType: "fade",
             modalVisible: false,
@@ -43,11 +43,11 @@ export default class Dialog extends Component {
         this.setState({modalVisible: isSHow});
         switch(isCancle)
         {
-            case CANCLE_LOGIIN:
-                alert('确定注销');
+            case this.CANCLE_LOGIIN:
+                alert(this.CANCLE_LOGIIN+'确定注销');
                 break;
-            case CANCLE_DIOLOG:
-                alert('取消对话框');
+            case this.CANCLE_DIOLOG:
+                alert(this.CANCLE_DIOLOG+'取消对话框');
                 this.setState({
                     modalVisible:false,
                 });

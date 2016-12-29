@@ -14,10 +14,8 @@ import {
 
 } from 'react-native';
 import Button from '../utils/common/CustomButton'
-import Dialog from '../utils/common/Dialog'
-let CANCLE_LOGIIN="0X00";
-let CANCLE_DIOLOG="0X11"
-export default class Personalcenter extends Dialog {
+import DialogComponent from '../utils/common/DialogComponent'
+export default class Personalcenter extends DialogComponent {
 
     render() {
         return (
@@ -48,10 +46,10 @@ export default class Personalcenter extends Dialog {
                 </View>
                 {/*按钮选择*/}
                 <View style={{flexDirection:'row',alignItems:'center',marginTop:20}} >
-                    <TouchableHighlight style={styles.buttonStyles} onPress={this.cancle.bind(this,[false,CANCLE_LOGIIN])}>
+                    <TouchableHighlight style={styles.buttonStyles} onPress={this.cancle.bind(this,[false,this.CANCLE_LOGIIN])}>
                         <Text style={styles.buttonText}>确定</Text>
                     </TouchableHighlight>
-                    <TouchableHighlight style={styles.buttonStyles} onPress={this.cancle.bind(this,[false,CANCLE_DIOLOG])}>
+                    <TouchableHighlight style={styles.buttonStyles} onPress={this.cancle.bind(this,[false,this.CANCLE_DIOLOG])}>
                         <Text style={styles.buttonText}>取消</Text>
                     </TouchableHighlight>
                 </View>
