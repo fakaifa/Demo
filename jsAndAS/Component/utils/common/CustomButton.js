@@ -4,19 +4,23 @@
 /**
  * 自定义的按钮
  */
-let borderRadius=10;
+let borderRadius=18;
 import React,{Component} from 'react'
 import {
-    TouchableOpacity,
-    Text
+    TouchableHighlight,
+    Text,
+    StyleSheet,
+    View,
 } from 'react-native'
 export default class CustomButton extends Component{
     render(){
         return (
             <View style={styles.customButtonViewStyles}>
-                <TouchableOpacity  style={styles.customButtonStyles}>
-                    <Text style={styles.textStyles}>this.props.text</Text>
-                </TouchableOpacity>
+                <TouchableHighlight  style={styles.customButtonStyles} activeOpacity={1}
+                                     underlayColor={'#f00'}
+                                     onPress={this.props.onPress}>
+                    <Text style={styles.textStyles}>{this.props.text}</Text>
+                </TouchableHighlight>
             </View>
         );
     }
@@ -29,10 +33,12 @@ const styles = StyleSheet.create({
     customButtonStyles:{
         borderRadius:borderRadius,
         backgroundColor:'#222222',
-        width:120,
+        width:200,
     },
     textStyles:{
         color:'#cdcdce',
-        textAlign:'center'
+        textAlign:'center',
+        paddingTop:8,
+        paddingBottom:8,
     }
 });
