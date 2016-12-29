@@ -29,12 +29,6 @@ export default class Dialog extends Component {
             this.setState({modalVisible: visible});
         }
     }
-    //----注销事件
-    cancleUser(){
-        this.setState({
-            modalVisible:true,
-        })
-    }
     //-----确定注销
     cancle(tag){
         //----根据参数tag判断点击的确定注销还是取消弹出框，不管取消弹出框还是确定取消弹出框都要消失。
@@ -44,7 +38,7 @@ export default class Dialog extends Component {
         switch(isCancle)
         {
             case this.CANCLE_LOGIIN:
-                alert(this.CANCLE_LOGIIN+'确定注销');
+                alert(this.CANCLE_LOGIIN+'确定注销------');
                 break;
             case this.CANCLE_DIOLOG:
                 alert(this.CANCLE_DIOLOG+'取消对话框');
@@ -53,10 +47,6 @@ export default class Dialog extends Component {
                 });
                 break;
         }
-    }
-    content(){
-
-
     }
     showDialog(){
         const modalBackgroundStyle = {
@@ -72,7 +62,6 @@ export default class Dialog extends Component {
                     <View style={[styles.container, modalBackgroundStyle]}>
                         {/*弹出框显示的内容*/}
                         {this.content()}
-
                     </View>
                 </Modal>
             </View>);

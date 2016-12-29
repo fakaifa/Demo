@@ -29,11 +29,17 @@ export default class Personalcenter extends DialogComponent {
             </View>
         );
     }
+    /**
+     * 点击注销执行的动作
+     **/
     onPress(){
         this.setState({
             modalVisible:true,
         });
     }
+    /**
+     *自定义弹出框的内容，此方法会自动又父类调用
+     **/
     content(){
         const innerContainerTransparentStyle = this.state.transparent
             ? {backgroundColor: '#fff',}

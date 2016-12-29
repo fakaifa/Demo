@@ -25,7 +25,6 @@ export default class Home extends Component {
             isdefaultchoseComob: 1,
         };
     }
-
     /**
      * render渲染图
      * @returns {*}
@@ -42,6 +41,7 @@ export default class Home extends Component {
             letfBtnbgColor = "#cdcdce";
             rightBtnbgColor = "#222222"
         }
+
         return (
             <View style={styles.container}>
                 {/*顶部的两个按钮  城市选择*/}
