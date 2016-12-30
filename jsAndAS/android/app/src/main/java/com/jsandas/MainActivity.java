@@ -1,6 +1,11 @@
 package com.jsandas;
 
+import android.os.Build;
+import android.view.Window;
+import android.view.WindowManager;
+
 import com.facebook.react.ReactActivity;
+import com.facebook.react.ReactRootView;
 
 public class MainActivity extends ReactActivity {
 
@@ -12,4 +17,5 @@ public class MainActivity extends ReactActivity {
     protected String getMainComponentName() {
         return "jsAndAS";
     }
+
 }

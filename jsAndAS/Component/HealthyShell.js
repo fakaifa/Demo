@@ -27,7 +27,7 @@ export default class  HeathyShell extends Component{
     render(){
         navigator = this.props.navigator;
         return(
-            <View style={{flex: 1}}>
+            <View style={{flex: 1,backgroundColor: '#fff' }}>
                 <TabNavigator Style={styles.tab} >
                     <TabNavigator.Item
                         selected={this.state.selectedTab === 'yytj'}

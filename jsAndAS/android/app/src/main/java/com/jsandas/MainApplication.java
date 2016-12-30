@@ -1,12 +1,16 @@
 package com.jsandas;
 
 import android.app.Application;
+import android.os.Build;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
+import com.facebook.react.ReactRootView;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 

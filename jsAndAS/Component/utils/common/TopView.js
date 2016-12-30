@@ -13,17 +13,10 @@ import {
 }from 'react-native'
 let {width,height}=Dimensions.get('window');
 export default  class TopView extends  Component{
-    constructor(props){
-        super(props);
-        this.state={
-               isImagebg:false,
-            };
-    }
     render(){
         return(
         <View>
             {this.topView()}
-            {this.contentView()}
         </View>
         );
     }
@@ -38,7 +31,7 @@ export default  class TopView extends  Component{
 
                 </TouchableOpacity>
                 {/**中 标题*/}
-                <Text style={styles.titleStyle} >{this.state.title}</Text>
+                <Text style={styles.titleStyle} >{this.props.title}</Text>
                 {/**右 */}
                 {this.renderRightView()}
             </View>
@@ -46,7 +39,7 @@ export default  class TopView extends  Component{
     }
     //-----顶部实现的view
     topView(){
-        if(this.state.isImagebg)
+        if(this.props.isImagebg)
         {
             return (
                 <Image style={styles.imageStyle}  source={require('../../../images/bg-status_01.png')}>
@@ -64,9 +57,9 @@ export default  class TopView extends  Component{
     //----左边的view
     renderLeftView(){
         //文字
-        if(this.state.leftText){
+        if(this.props.leftText){
             return(
-                <Text style={[styles.textStyle,{marginLeft:13}]} >{this.state.leftText}</Text>
+                <Text style={[styles.textStyle,{marginLeft:13}]} >{this.props.leftText}</Text>
             )
         }
         else{//图片
@@ -77,25 +70,24 @@ export default  class TopView extends  Component{
     }
     //----右边的view
     renderRightView(){
-        if(this.state.rightText){
+        if(this.props.rightText){
             //右边有文字时
             return(
                 <TouchableOpacity onPress={this.rightClick.bind(this)} style={{width:30,height:30}}>
-                    <Text style={[styles.textStyle,{marginRight:10} ]}>{this.state.rightText} </Text>
+                    <Text style={[styles.textStyle,{marginRight:10} ]}>{this.props.rightText} </Text>
                 </TouchableOpacity>
             )
         }else{
             //右边没有文字时
             return(
-            <View style={{width:30,height:30,backgroundColor:'#fff'}}>
+            <View style={{width:30,height:30}}>
             </View>
             )
         }
     }
     //-----左边的点击事件
     popClick(){
-        const {navigator}=this.props;
-        if(navigator)
+        if(this.props.navi)
         {
             navigator.pop();
         }

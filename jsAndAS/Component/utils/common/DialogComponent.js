@@ -12,6 +12,7 @@ import {
     Switch,
     Platform,
 } from 'react-native';
+import TopView from '../../utils/common/TopView'
 export default class Dialog extends Component {
     constructor(props){
         super(props);
