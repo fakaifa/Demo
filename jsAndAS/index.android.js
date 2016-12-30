@@ -8,9 +8,7 @@ import React, { Component } from 'react';
 import {
 
 } from 'react-native';
-var message = "this in window";
-let isNetConnection;
-import App from './Component/APP'
+import App from './Component/AppMain'
 export default class jsAndAS extends Component {
     render(){
         return(

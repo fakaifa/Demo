@@ -11,10 +11,11 @@ import {
     NetInfo,
     TouchableOpacity,
     TouchableHighlight
-
 } from 'react-native';
 import Button from '../utils/common/CustomButton'
 import DialogComponent from '../utils/common/DialogComponent'
+import LoginApp from './LoginApp'
+import ChangePwdSuccess from './ChangePwdSuccess'
 export default class Personalcenter extends DialogComponent {
 
     render() {
@@ -24,10 +25,26 @@ export default class Personalcenter extends DialogComponent {
                     <Button
                         text="注销"
                         onPress={this.onPress.bind(this)}/>
+                    <Button
+                        text="登录"
+                        onPress={this.loginEvent.bind(this)}/>
                 </View>
                 {this.showDialog()}
             </View>
         );
+    }
+    //---登录事件
+    loginEvent(){
+       const {navigator}=this.props;
+       if(navigator)
+       {
+           navigator.push(
+               {
+                   name:ChangePwdSuccess,
+                   component:ChangePwdSuccess,
+               }
+           );
+       }
     }
     /**
      * 点击注销执行的动作

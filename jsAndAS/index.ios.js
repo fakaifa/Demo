@@ -7,7 +7,7 @@
 import React, { Component } from 'react';
 import {
 } from 'react-native';
-import App from './Component/APP'
+import App from './Component/AppMain'
 export default class jsAndAS extends Component {
     render(){
         return(
