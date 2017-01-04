@@ -16,6 +16,7 @@ import Button from '../utils/common/CustomButton'
 import DialogComponent from '../utils/common/DialogComponent'
 import LoginApp from './LoginApp'
 import ChangePwdSuccess from './ChangePwdSuccess'
+import ContactList from './contactList'
 export default class Personalcenter extends DialogComponent {
 
     render() {
@@ -28,10 +29,26 @@ export default class Personalcenter extends DialogComponent {
                     <Button
                         text="登录"
                         onPress={this.loginEvent.bind(this)}/>
+                    <Button
+                        text="成员列表"
+                        onPress={this.contactList.bind(this)}/>
                 </View>
                 {this.showDialog()}
             </View>
         );
+    }
+    //----跳到成员列表
+    contactList(){
+        const {navigator}=this.props;
+        if(navigator)
+        {
+            navigator.push(
+                {
+                    name:ContactList,
+                    component:ContactList,
+                }
+            );
+        }
     }
     //---登录事件
     loginEvent(){

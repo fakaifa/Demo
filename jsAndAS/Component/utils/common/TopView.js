@@ -21,20 +21,29 @@ export default  class TopView extends  Component{
         );
     }
     topmyView(){
+        let lineColor,lineHeight;
+        if(this.props.isshowLine)
+        {
+            lineColor='#cdcdce'
+            lineHeight=1
+        }else{
+            lineColor='#fff'
+            lineHeight=0
+        }
         return(
-            <View style={styles.navigatorBar}>
-                {/**左 图片或文字*/}
-                <TouchableOpacity
-                    onPress={this.popClick.bind(this)}>
+                <View style={[styles.navigatorBar,{ borderBottomWidth:lineHeight, borderBottomColor:lineColor,}]}>
+                    {/**左 图片或文字*/}
+                    <TouchableOpacity
+                        onPress={this.popClick.bind(this)}>
 
-                    {this.renderLeftView()}
+                        {this.renderLeftView()}
 
-                </TouchableOpacity>
-                {/**中 标题*/}
-                <Text style={styles.titleStyle} >{this.props.title}</Text>
-                {/**右 */}
-                {this.renderRightView()}
-            </View>
+                    </TouchableOpacity>
+                    {/**中 标题*/}
+                    <Text style={styles.titleStyle} >{this.props.title}</Text>
+                    {/**右 */}
+                    {this.renderRightView()}
+                </View>
         );
     }
     //-----顶部实现的view
@@ -104,8 +113,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: "center",
         flexDirection: 'row',
-        borderBottomWidth:1,
-        borderBottomColor:'#cdcdce'
+
+        paddingTop: Platform.OS === 'ios' ? 15 : 0,
     },
     imageStyle:{
         height : (Platform.OS =='ios') ? 64 : 44,
@@ -117,5 +126,6 @@ const styles = StyleSheet.create({
         fontWeight:'bold',
         backgroundColor:'transparent',
     },
+
 
 });

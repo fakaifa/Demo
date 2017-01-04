@@ -7,6 +7,7 @@ import {
     Navigator,
     BackAndroid,
     ToastAndroid,
+    Platform,
 }from 'react-native'
 import HealthyShell from "./HealthyShell"
 export default class AppMain extends Component{
@@ -28,5 +29,6 @@ export default class AppMain extends Component{
                 renderScene={this._renderScene.bind(this)}/>
         );
     }
+
 }
 AppRegistry.registerComponent('jsAndAS', () => AppMain);

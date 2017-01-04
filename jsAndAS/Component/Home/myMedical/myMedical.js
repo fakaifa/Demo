@@ -15,7 +15,7 @@ export default class myMedical extends Component{
     render(){
         return(
             <View style={{justifyContent:'center',width:width,height:height,alignItems:'center'}}>
-                <Text>我的体检</Text>
+                <Text style={{color:'#f00'}}>我的体检</Text>
             </View>
         );
     }

@@ -15,7 +15,7 @@ export default class healthyState extends Component{
     render(){
         return(
             <View style={{justifyContent:'center',width:width,height:height,alignItems:'center'}}>
-                <Text>身体状况页面</Text>
+                <Text>身体状况</Text>
             </View>
         );
     }

@@ -51,7 +51,7 @@ export default class Dialog extends Component {
     }
     showDialog(){
         const modalBackgroundStyle = {
-            backgroundColor: 'rgba(0, 0, 0, 0.5)'
+            backgroundColor: 'transparent'
         };
         return (
             <View >

@@ -10,36 +10,44 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    TouchableHighlight
+    TouchableHighlight,
+    ActivityIndicator,
+    AsyncStorage
 } from 'react-native'
 import DialogComponent from '../utils/common/DialogComponent'
 import TopView from '../utils/common/TopView'
 let {width,height}=Dimensions.get('window');
 import Network from '../utils/Network'
-import LoginUrl from '../utils/common/Urlheader';
+import Urlheader from '../utils/common/Urlheader';
+import MyButton from '../utils/common/MyButton'
+import ReceivePassword from './RetrievePassword'
+import styles from './ComInputStyles'
+import Register from './Register'
 export  default  class LoginApp extends DialogComponent{
     constructor(props)
     {
         super(props)
         this.state = {
-             isImagebg:true,
+             transparent:true,
              modalVisible:false,
-            phoneNumber:'',
-            passWord:'',
-
+             phoneNumber:'',
+             passWord:'',
         };
     }
     render(){
         return(
             <View style={styles.container}>
-                <TopView/>
+                <TopView
+                    isImagebg={false}
+                    isshowLine={false}
+                    navi={this.props.navigator}/>
                 <View style={styles.loginStyles}>
                     {/*分上下两部分*/}
                     {/*logo图*/}
                     <View style={styles.logViewStyles}>
                         <Image source={require('../../images/img_logo_dl.png')} style={styles.imgLogStyles}>
                         </Image>
-                        <Text style={{fontSize:15,color:'#778ef2',marginTop:10}} onPress={this.onPress.bind(this)}>登录</Text>
+                        <Text style={{fontSize:15,color:'#778ef2',marginTop:10}}>登录</Text>
                         <View style={{width:157,height:3,backgroundColor:'#778ef2',marginTop:20,}}>
                         </View>
                         {/*用户输入的手机号和密码*/}
@@ -86,11 +94,11 @@ export  default  class LoginApp extends DialogComponent{
                             <Text style={styles.textStyles} >注册健康党</Text>
                         </TouchableHighlight>
                     </View>
-                    <TouchableOpacity
-                        onPress={this.loginEvent.bind(this)}
-                        style={{width:244,height:41,borderRadius:20,backgroundColor:'#778ef2',justifyContent:'center',alignItems:'center',marginTop:40}}>
-                        <Text style={{color:'#fff',fontSize:15,}}>立即登录</Text>
-                    </TouchableOpacity>
+                    <View style={{marginTop:40}}>
+                        <MyButton buttonText="立即登录"
+                                  onClick={this.loginEvent.bind(this)}/>
+                    </View>
+
                 </View>
                 {this.showDialog()}
             </View>
@@ -101,120 +109,98 @@ export  default  class LoginApp extends DialogComponent{
             this.setState({
                 textColor:"#778ef2"
             });
-            alert(tag)
+            let toname,tocomponent;
+            if(this.props.navigator)
+            {
+                if(tag===1)
+                {
+                    toname=ReceivePassword;
+                    tocomponent=ReceivePassword;
+                }else if(tag==2)
+                {
+                    toname=Register;
+                    tocomponent=Register;
+                }
+                this.props.navigator.push({
+                    name:toname,
+                    component:tocomponent,
+                });
+            }
+
     }
     loginEvent(){
-        if(this.state.phoneNumber.length==11)
+        if(this.state.phoneNumber)
         {
-            let regres=/^1[0-9]{10}$/;
-            if(regres.test(this.state.phoneNumber))
+            if(this.state.phoneNumber.length==11)
             {
+                let regres=/^1[0-9]{10}$/;
+
+                if(regres.test(this.state.phoneNumber))
+                {
                     if(this.state.passWord.length==6)
                     {
                         this.LoginPostInfo();
                     }else{
-                        alert('手机号不足6位')
+                        alert('密码不足6位')
                     }
-            }else{
-                alert('请输入正确的手机号码')
+                }else{
+                    alert('请输入正确的手机号码')
+                }
+            }else {
+                alert('手机号必须为11位')
             }
         }else{
-            alert('手机号必须为11位')
+            alert('手机号不能为空')
         }
     }
     LoginPostInfo(){
-        //http://192.168.137.95:8888/api/api-session-id-auth/
-       // let loginUrl=LoginUrl.URL.header+""
-        let loginUrl="http://192.168.137.95:8888/api/api-session-id-auth/";
+       let loginUrl=Urlheader.URL.header+"/api/api-token-auth/";
+        // this.setState({
+        //     modalVisible:true,
+        // });
+        // alert('phone='+this.state.phoneNumber+'---password='+this.state.passWord)
         let param={
-            username:this.state.phoneNumber,
-            password:this.state.passWord,
+            'username':this.state.phoneNumber,
+            'password':this.state.passWord,
         }
-        Network.post(loginUrl,param,(json,isSuccess)=>{
-                if(isSuccess)
-                {
-                    alert(json)
-                }else{
-                    alert()
-                }
-        })
-    }
-    onPress(){
-        this.setState({
-            modalVisible:true,
+        AsyncStorage.setItem("Login","1111").then((err)=>{
+            if(err)
+            {
+                alert(Error.message)
+            }else{
+                alert('登录陈宫')
+            }
         });
+        // Network.post(loginUrl,param,(json,isSuccess)=>{
+        //         if(isSuccess)
+        //         {
+        //            // alert(json+'----')
+        //         }else{
+        //             // alert('----error-'+json)
+        //         }
+        //         //---登录等待框消失
+        //         // this.setState({
+        //         //     modalVisible:false,
+        //
+        //     // });
+        //
+        // })
     }
     /**
-     *自定义弹出框的内容，此方法会自动又父类调用
+     *自定义弹出框的内容，此方法会自动有父类调用
      **/
     content(){
         const innerContainerTransparentStyle = this.state.transparent
-            ? {backgroundColor: '#fff',}
+            ? {backgroundColor: 'transparent',}
             : null
         return(
             <View style={[styles.innerContainer, innerContainerTransparentStyle]}>
-                {/*标题*/}
-                <View style={{borderBottomColor:'#000',borderBottomWidth:1,paddingBottom:20}}>
-                    <Text style={{fontSize:16,color:'#000',marginLeft:10,marginTop:20,}}>确定要注销吗？</Text>
-                </View>
-                {/*按钮选择*/}
-                <View style={{flexDirection:'row',alignItems:'center',marginTop:20}} >
-                    <TouchableOpacity style={styles.buttonStyles} onPress={this.cancle.bind(this,[false,this.CANCLE_LOGIIN])}>
-                        <Text style={styles.buttonText}>确定</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonStyles} onPress={this.cancle.bind(this,[false,this.CANCLE_DIOLOG])}>
-                        <Text style={styles.buttonText}>取消</Text>
-                    </TouchableOpacity>
+                <View style={styles.modalStyles}>
+                    <ActivityIndicator style={{marginLeft:20,}}
+                                       size={'large'}></ActivityIndicator>
+                    <Text style={{marginLeft:10,}}>正在登录,请稍后.......</Text>
                 </View>
             </View>
         );
     }
 }
-const styles = StyleSheet.create({
-    container: {
-        flex:1,
-        backgroundColor:'#fff'
-    },
-    loginStyles:{
-        width:width,
-        alignItems:'center',
-        justifyContent:'center'
-    },
-    logViewStyles:{
-        alignItems:'center',
-    },
-    imgLogStyles:{
-        height:150,
-        width:150,
-        marginTop:30,
-    },
-    phoneNumberStyles:{
-        flexDirection:'row',
-        width:width*0.75,
-        alignItems:'center',
-        height:40,
-        alignSelf:'center',
-        borderBottomWidth:1,
-        borderBottomColor:'#cdcece'
-
-    },
-    imgStyles:{
-        width:23,
-        height:23,
-    },
-    textinputStyles:{
-        width:width*0.4,
-        height:40,
-    },
-        phoneStyle:{
-        width : 0.75 * width*0.9,
-        marginLeft : 10,
-        fontSize :width<375? 14:16,
-        color : 'white',
-        height: 40,
-    },
-    textStyles:{
-        fontSize:15,
-        color:'#cdcdce'
-    }
-});

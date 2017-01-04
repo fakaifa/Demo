@@ -10,7 +10,10 @@ import {
     NativeModules,
     NetInfo,
     TouchableOpacity,
-    Image
+    Image,
+    BackAndroid,
+    ToastAndroid,
+    Platform,
 } from 'react-native';
 import TabNavigator from 'react-native-tab-navigator';
 import Home from './Home/Home'
@@ -63,6 +66,28 @@ export default class  HeathyShell extends Component{
                 </TabNavigator>
             </View>
         );
+    }
+    componentWillMount() {
+        const {navigator}=this.props;
+        const value = navigator.getCurrentRoutes();
+        console.log('当前回退栈中有-----mine--' + value.length);
+        if (Platform.OS === 'android') {
+            BackAndroid.addEventListener('hardwareBackPress', this.onBackAndroid.bind(this));
+        }
+    }
+    componentWillUnmount() {
+        if (Platform.OS === 'android') {
+            BackAndroid.removeEventListener('hardwareBackPress', this.onBackAndroid.bind(this));
+        }
+    }
+    onBackAndroid() {
+        const {navigator}=this.props;
+        const value = navigator.getCurrentRoutes();
+        if (value.length > 1) {
+            navigator.pop();
+            return true;//接管默认行为
+        }
+        return false;//默认行为
     }
 }
 const styles = StyleSheet.create({
