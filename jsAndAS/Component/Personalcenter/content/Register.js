@@ -14,12 +14,13 @@ import {
     ActivityIndicator,
 }from 'react-native'
 import styles from './ComInputStyles'
-import DialogComponent from '../utils/common/DialogComponent'
-import TopView from '../utils/common/TopView'
+import DialogComponent from '../../utils/common/DialogComponent'
+import TopView from '../../utils/common/TopView'
 let {width,height}=Dimensions.get('window');
-import MyButton from '../utils/common/MyButton'
-import Network from '../utils/Network'
-import Urlheader from '../utils/common/Urlheader';
+import MyButton from '../../utils/common/MyButton'
+import Network from '../../utils/Network'
+import Urlheader from '../../utils/common/Urlheader';
+import  SharedPreferenceUtil from '../../utils/common/SharedPreference'
 export default class Register extends DialogComponent{
     constructor(props)
     {
@@ -46,7 +47,7 @@ export default class Register extends DialogComponent{
                     {/*分上下两部分*/}
                     {/*logo图*/}
                     <View style={styles.logViewStyles}>
-                        <Image source={require('../../images/img_logo_dl.png')} style={styles.imgLogStyles}>
+                        <Image source={require('../../../images/img_logo_dl.png')} style={styles.imgLogStyles}>
                         </Image>
                         <Text style={{fontSize:15,color:'#778ef2',marginTop:10}}>注册</Text>
                         <View style={{width:157,height:3,backgroundColor:'#778ef2',marginTop:20,}}>
@@ -55,7 +56,7 @@ export default class Register extends DialogComponent{
                         <View style={{width:width*0.4,marginTop:20,alignItems:'center'}}>
                             {/*手机号*/}
                             <View style={[styles.phoneNumberStyles,{backgroundColor:'#fff'}]}>
-                                <Image source={require('../../images/icon_sjh_dl.png')} style={styles.imgStyles}></Image>
+                                <Image source={require('../../../images/icon_sjh_dl.png')} style={styles.imgStyles}></Image>
                                 <View style={{height:40}}>
                                     <TextInput style={styles.textinputStyles}
                                                placeholder={'请输入手机号'}
@@ -75,7 +76,7 @@ export default class Register extends DialogComponent{
                         </View>
                         {/*请输入验证码*/}
                         <View style={[styles.phoneNumberStyles,{backgroundColor:'#fff'}]}>
-                            <Image source={require('../../images/icon_yzm_zc.png')} style={styles.imgStyles}></Image>
+                            <Image source={require('../../../images/icon_yzm_zc.png')} style={styles.imgStyles}></Image>
                             <TextInput style={styles.textinputStyles}
                                        placeholder={'请输入验证码'}
                                        placeholderTextColor="#8c8c8c"
@@ -87,7 +88,7 @@ export default class Register extends DialogComponent{
                         </View>
                         {/*请输入密码*/}
                         <View style={[styles.phoneNumberStyles,{backgroundColor:'#fff'}]}>
-                            <Image source={require('../../images/icon_qr_zc.png')} style={styles.imgStyles}></Image>
+                            <Image source={require('../../../images/icon_qr_zc.png')} style={styles.imgStyles}></Image>
                             <TextInput style={styles.textinputStyles}
                                        placeholder={'请输入密码'}
                                        placeholderTextColor="#8c8c8c"
@@ -98,7 +99,7 @@ export default class Register extends DialogComponent{
                         </View>
                         {/*请在输入一次*/}
                         <View style={[styles.phoneNumberStyles,{backgroundColor:'#fff'}]}>
-                            <Image source={require('../../images/icon_qr_zc.png')} style={styles.imgStyles}></Image>
+                            <Image source={require('../../../images/icon_qr_zc.png')} style={styles.imgStyles}></Image>
                             <TextInput style={styles.textinputStyles}
                                        placeholder={'请再输入一次'}
                                        placeholderTextColor="#8c8c8c"
@@ -139,28 +140,28 @@ export default class Register extends DialogComponent{
                 regres=/^1[0-9]{10}$/;
                 if(regres.test(this.state.phoneNumber))
                 {
-                    if(!this.state.enable)
-                    {
-                        this.Time=setInterval(()=>{
-                            if(this.state.codeNumber>0) {
-                                this.setState({
-                                    codeNumber: this.state.codeNumber - 1,
-                                    enable: true,
-                                });
-                            }else{
-                                clearInterval(this.Time);
-                                this.setState({
-                                    enable:false,
-                                });
-                            }
-                        },1000);
-                    }
+
                     Network.post(getCodeURL,params,(json,isSuccess)=>{
                         if(isSuccess)
                         {
-                                alert('获取成功'+json)
+                            if(!this.state.enable)
+                            {
+                                this.Time=setInterval(()=>{
+                                    if(this.state.codeNumber>0) {
+                                        this.setState({
+                                            codeNumber: this.state.codeNumber - 1,
+                                            enable: true,
+                                        });
+                                    }else{
+                                        clearInterval(this.Time);
+                                        this.setState({
+                                            enable:false,
+                                        });
+                                    }
+                                },1000);
+                            }
                         }else{
-                            // alert('获取验证码失败')
+                            alert('获取验证码失败'+json)
                         }
                     })
                 }else{
@@ -224,8 +225,11 @@ export default class Register extends DialogComponent{
 
     }
     postRegister(){
+        this.setState({
+            modalVisible:true,
+        })
         //http://192.168.137.95:8888/api/api-session-id-auth/
-        let registerUrl=Urlheader.URL.header+"";
+        let registerUrl=Urlheader.URL.header+'api/account/register/';
         let params={
             mobile_phone:this.state.phoneNumber,
             code:this.state.safeNumber,
@@ -236,13 +240,15 @@ export default class Register extends DialogComponent{
             if(isSuccess)
             {
               //保存token值
+                let issuccess=SharedPreferenceUtil.setItem(json.token,this.props.navigator);
             }else{
-                //---注册失败原因
+                alert(json)
             }
+            this.setState({
+                modalVisible:false,
+            })
         });
-        this.setState({
-            modalVisible:true,
-        })
+
     }
     content(){
         const innerContainerTransparentStyle = this.state.transparent
@@ -253,7 +259,7 @@ export default class Register extends DialogComponent{
                 <View style={styles.modalStyles}>
                     <ActivityIndicator style={{marginLeft:20,}}
                                        size={'large'}></ActivityIndicator>
-                    <Text style={{marginLeft:10,}}>正在注册,请稍后.......</Text>
+                    <Text style={{marginLeft:10,color:'#fff'}}>正在注册,请稍后.......</Text>
                 </View>
             </View>
         );

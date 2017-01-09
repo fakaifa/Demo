@@ -17,12 +17,13 @@ export default class Hospital extends Component{
     render(){
         return(
             <View style={{width:width,height:height,alignItems:'center',flexDirection:'row'}}>
-                <View style={{width:width*0.40,height:height}}>
+                <View style={{width:width*0.30,height:height}}>
                     <LeftList
                     ref={(ref)=>this.LeftListID=ref}
                     rightList={this.RightListID}/>
                 </View>
-                <View style={{width:width*0.55,height:height-25,marginLeft:width*0.05,}}>
+                <View style={{width:2,height:height,backgroundColor:'#cdcece'}}></View>
+                <View style={{width:width*0.70,height:height-25}}>
                     <RightList
                         ref={(ref)=>this.RightListID=ref}
                         leftList={this.LeftListID}/>

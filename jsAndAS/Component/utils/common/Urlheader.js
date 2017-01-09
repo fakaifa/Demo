@@ -8,7 +8,8 @@ let url={
     // https://healthydoc8080.ngrok.io
     // https://192.168.137.95
     // http://dev.api.healthydoc.com.cn/
-    header:"https://dev.api.healthydoc.com.cn/",
+    // header:"https://dev.api.healthydoc.com.cn/",
+    header : 'http://192.168.137.95:8888/',
     registerProtocol : "https://api.healthydoc.com.cn/register/protocol/",
     receiveProtocol: "https://api.healthydoc.com.cn/deputy/receive/protocol/"
 }

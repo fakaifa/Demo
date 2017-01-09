@@ -18,11 +18,12 @@ import HealthyState from './healthyState/healthyState'
 import MyMedical from './myMedical/myMedical'
 let {width,height}=Dimensions.get('window');
 var Swiper = require('react-native-swiper');
-
+import PaySuccess from '../physicalOrder/PayResult/PaySuccess'
 
 export default class Home extends Component {
     constructor(props) {
         super(props);
+        //----判断是否是在线状态
         this.checkIsLog();
         this.state= {
             currentPage:0,
@@ -33,22 +34,29 @@ export default class Home extends Component {
     checkIsLog(){
         try {
             AsyncStorage.getItem(
-                'Login',
+                'USERTOKEN',
                 (error,result)=>{
                     if (error){
                         //---未登录状态
-                        alert("---未登录状态"+result)
                         this.setState({
                             currentPage:1,
                             isLoginSuccess:false,
                         });
                     }else{
                         //----登录状态
-                        alert("登录状态"+result)
-                       this.setState({
-                           currentPage:0,
-                           isLoginSuccess:true,
-                       });
+                        if(!result)
+                        {
+                            this.setState({
+                                currentPage:1,
+                                isLoginSuccess:false,
+                            });
+                        }else{
+
+                            this.setState({
+                                currentPage:0,
+                                isLoginSuccess:true,
+                            });
+                        }
                     }
                 }
             )
@@ -97,13 +105,22 @@ export default class Home extends Component {
         }
         return btnChoseLen;
     }
+    pay()
+    {
+        if(this.props.navigator)
+        {
+            this.props.navigator.push({
+                name:PaySuccess,component:PaySuccess
+            });
+        }
+    }
     render(){
       return(
           <View style={styles.container}>
               {/*顶部的两个按钮  城市选择*/}
               <View style={{flexDirection:'row',justifyContent:'space-between'}}>
                   {/*地区选择*/}
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={this.pay.bind(this)}>
                       <Text>杭州</Text>
                   </TouchableOpacity>
                   {/*套餐和医院的选择*/}
@@ -148,18 +165,18 @@ export default class Home extends Component {
             {
                 if(i==0)
                 {
-                    scrollViewLen.push(<MyMedical key={i} />)
+                    scrollViewLen.push(<MyMedical key={i} navi={this.props.navi}/>)
                 }
                else{
-                    scrollViewLen.push(<HealthyState key={i}/>)
+                    scrollViewLen.push(<HealthyState key={i} navi={this.props.navi}/>)
                 }
             }else{
                 if(i==0)
                 {
-                    scrollViewLen.push(<HealthyState key={i}/>)
+                    scrollViewLen.push(<HealthyState key={i} navi={this.props.navi}/>)
                 }
                 else{
-                    scrollViewLen.push(<MyMedical key={i}/>)
+                    scrollViewLen.push(<MyMedical key={i} navi={this.props.navi}/>)
                 }
             }
         }
@@ -189,6 +206,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop:5,
+        backgroundColor:'#fff'
     },
     topButtonStyle:{
         flex:1,

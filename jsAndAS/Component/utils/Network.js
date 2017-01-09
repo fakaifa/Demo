@@ -83,7 +83,7 @@ export default class network extends Component {
                             // console.log(responseJson)
 
 
-                             let error = NetRequest.resolveErrorJson(responseJson)
+                             let error = network.resolveErrorJson(responseJson)
                             callback(error,false)
                         }
                     })
@@ -146,7 +146,7 @@ export default class network extends Component {
                             //在这里处理一下返回的错误信息
                             // console.log(responseJson)
 
-                            let error = NetRequest.resolveErrorJson(responseJson)
+                            let error = network.resolveErrorJson(responseJson)
                             callback(error,false)
 
                         }

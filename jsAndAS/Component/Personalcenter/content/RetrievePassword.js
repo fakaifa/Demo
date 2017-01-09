@@ -13,13 +13,15 @@ import {
     TouchableHighlight,
     ActivityIndicator,
 } from 'react-native'
-import TopView from '../utils/common/TopView'
+import TopView from '../../utils/common/TopView'
 let {width,height}=Dimensions.get('window');
-import MyButton from '../utils/common/MyButton'
-import DialogComponet from '../utils/common/DialogComponent'
+import MyButton from '../../utils/common/MyButton'
+import DialogComponet from '../../utils/common/DialogComponent'
 import styles from './ComInputStyles'
-import Network from '../utils/Network'
-import Urlheader from '../utils/common/Urlheader';
+import Network from '../../utils/Network'
+import Urlheader from '../../utils/common/Urlheader';
+import  SharedPreferenceUtil from '../../utils/common/SharedPreference'
+import ChangePwdSuccess from './ChangePwdSuccess'
 export default  class RetrievePassword extends  DialogComponet{
     constructor(props)
     {
@@ -34,6 +36,9 @@ export default  class RetrievePassword extends  DialogComponet{
             codeNumber:60,
         };
     }
+    /**
+     * 页面的渲染
+     */
     render(){
         return(
             <View style={styles.container}>
@@ -46,13 +51,13 @@ export default  class RetrievePassword extends  DialogComponet{
                     {/*分上下两部分*/}
                     {/*logo图*/}
                     <View style={styles.logViewStyles}>
-                        <Image source={require('../../images/img_logo_dl.png')} style={styles.imgLogStyles}>
+                        <Image source={require('../../../images/img_logo_dl.png')} style={styles.imgLogStyles}>
                         </Image>
                         {/*用户输入的手机号和密码*/}
                         <View style={{width:width*0.4,marginTop:20,alignItems:'center'}}>
                             {/*手机号*/}
                             <View style={[styles.phoneNumberStyles,{backgroundColor:'#fff'}]}>
-                                <Image source={require('../../images/icon_sjh_dl.png')} style={styles.imgStyles}></Image>
+                                <Image source={require('../../../images/icon_sjh_dl.png')} style={styles.imgStyles}></Image>
                                 <View style={{height:40}}>
                                     <TextInput style={styles.textinputStyles}
                                                placeholder={'请输入手机号'}
@@ -70,19 +75,18 @@ export default  class RetrievePassword extends  DialogComponet{
                         </View>
                         {/*验证码*/}
                         <View style={[styles.phoneNumberStyles,{backgroundColor:'#fff'}]}>
-                            <Image source={require('../../images/icon_yzm_zc.png')} style={styles.imgStyles}></Image>
+                            <Image source={require('../../../images/icon_yzm_zc.png')} style={styles.imgStyles}></Image>
                             <TextInput style={styles.textinputStyles}
                                        placeholder={'请输入验证码'}
                                        placeholderTextColor="#8c8c8c"
                                        underlineColorAndroid="transparent"
                                        onChangeText={(safeNumber)=>{this.setState({safeNumber})}}
-                                       secureTextEntry={true}
                             ></TextInput>
 
                         </View>
                         {/*请输入密码*/}
                         <View style={[styles.phoneNumberStyles,{backgroundColor:'#fff'}]}>
-                            <Image source={require('../../images/icon_qr_zc.png')} style={styles.imgStyles}></Image>
+                            <Image source={require('../../../images/icon_qr_zc.png')} style={styles.imgStyles}></Image>
                             <TextInput style={styles.textinputStyles}
                                        placeholder={'请输入密码'}
                                        placeholderTextColor="#8c8c8c"
@@ -93,7 +97,7 @@ export default  class RetrievePassword extends  DialogComponet{
                         </View>
                         {/*请在输入一次密码*/}
                         <View style={[styles.phoneNumberStyles,{backgroundColor:'#fff'}]}>
-                            <Image source={require('../../images/icon_qr_zc.png')} style={styles.imgStyles}></Image>
+                            <Image source={require('../../../images/icon_qr_zc.png')} style={styles.imgStyles}></Image>
                             <TextInput style={styles.textinputStyles}
                                        placeholder={'请再输入一次'}
                                        placeholderTextColor="#8c8c8c"
@@ -105,7 +109,7 @@ export default  class RetrievePassword extends  DialogComponet{
                     </View>
                     <View style={{marginTop:40}}>
                         <MyButton buttonText="重置密码"
-                                  onClick={this.loginEvent.bind(this)}/>
+                                  onClick={this.replaceEvent.bind(this)}/>
                     </View>
 
                 </View>
@@ -114,7 +118,7 @@ export default  class RetrievePassword extends  DialogComponet{
         );
     }
 
-    /**
+    /**  获取验证码
      * @param phoneNumber  用户输入的手机号
      */
     getCode(){
@@ -165,20 +169,41 @@ export default  class RetrievePassword extends  DialogComponet{
         }
 
     }
-    loginEvent(){
-        /**
-         * 重置密码点击事件
-         */
-
+    /**
+     * 重置密码点击事件
+     */
+    replaceEvent(){
+        let replacepassUrl=Urlheader.URL.header+'api/account/rest-password/';
+        let params={
+            'mobile_phone' :this.state.phoneNumber,
+            'code' :this.state.safeNumber,
+            'password' : this.state.passWord,
+            're_password' : this.state.againPassword
+        };
         this.setState({
             modalVisible:true,
+        });
+        Network.post(replacepassUrl,params,(json,isSuccess)=>{
+            if(isSuccess)
+            {
+                alert('修改成功')
+                if(this.props.navigator)
+                {
+                    this.props.navigator.push({
+                        name:ChangePwdSuccess,
+                        component:ChangePwdSuccess,
+                    })
+                }
+            }else{
+                alert('----error-'+json)
+            }
+            //---登录等待框消失
+            this.setState({
+                modalVisible:false,
+            });
+
         })
-    }
-    onPress(){
-        alert('onPress')
-    }
-    Event(){
-        alert('Event')
+
     }
     content(){
         const innerContainerTransparentStyle = this.state.transparent
@@ -189,7 +214,7 @@ export default  class RetrievePassword extends  DialogComponet{
                 <View style={styles.modalStyles}>
                     <ActivityIndicator style={{marginLeft:20,}}
                                        size={'large'}></ActivityIndicator>
-                    <Text style={{marginLeft:10,}}>正在重置,请稍后.......</Text>
+                    <Text style={{marginLeft:10,color:'#FFF'}}>正在重置,请稍后.......</Text>
                 </View>
             </View>
 

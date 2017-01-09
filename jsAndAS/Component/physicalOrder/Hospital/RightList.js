@@ -8,7 +8,7 @@ import {
     Dimensions,
 } from 'react-native'
 let {width,height}=Dimensions.get('window');
-let itemHeight=60;
+let itemHeight=35;
 let datasAry=[];
 export  default  class RightList extends Component{
     constructor(props) {
@@ -105,7 +105,7 @@ export  default  class RightList extends Component{
         {
             if(datasAry[i].indexOf(leftItemContent)!=-1)
             {
-                let heightDisence=i*itemHeight;
+                let heightDisence=i*(itemHeight+2);
                 this.rightListViewID.scrollTo({x:0,y:heightDisence,animated:true})
                 return;
             }
@@ -116,7 +116,8 @@ export  default  class RightList extends Component{
      **/
     renderRow(rowData){
         return(
-            <Text style={{paddingHorizontal:20,borderBottomColor:'#f0f',borderRadius:20,borderWidth:2,height:itemHeight}}>{rowData}</Text>
+            // <Text style={{paddingHorizontal:20,borderBottomColor:'#f0f',borderRadius:20,borderWidth:2,height:itemHeight}}>{rowData}</Text>
+            <Text style={{flex:1,borderBottomWidth:2,borderBottomColor:'#cdcece'}}>{rowData}</Text>
         );
     }
     render(){

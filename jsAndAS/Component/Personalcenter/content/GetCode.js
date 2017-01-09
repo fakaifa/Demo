@@ -4,7 +4,7 @@
  */
 import React,{Component} from 'react'
 import {} from 'react-native';
-import Network from '../../Component/utils/Network';
+import Network from '../../utils/Network';
 const getCode=function getSafeCode(phoneNumber,codeNumbers){
     let getCodeURL=Urlheader+"";
     let params={
